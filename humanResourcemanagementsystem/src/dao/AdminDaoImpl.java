@@ -10,22 +10,20 @@ import util.DBUtil;
 public class AdminDaoImpl implements AdminsDao{
 
 	@Override
-	public boolean loginAdmin(String username,String passworld) throws AdminException{
+	public boolean loginAdmin(String username,String password) throws AdminException{
 		boolean get=false;
 		
 		try(Connection conn=DBUtil.getConnection()){
 			PreparedStatement st=conn.prepareStatement("select * from admins where username =? and password = ?");
 			st.setString(1, username);
-			st.setString(2, passworld);
+			st.setString(2, password);
 			
 			ResultSet set=st.executeQuery();
 			if(set.next()) {
-				return true;
-			}else {
-				throw new AdminException("User Not Found!");
+				get=true;
 			}
 		}catch (Exception e) {
-			System.err.println(e.getMessage());
+			new AdminException(e.getMessage());
 		}
 		return get;
 	}
