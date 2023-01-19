@@ -441,6 +441,8 @@ public class HRMDemo {
 								   //exit;
 								   System.out.println();
 								   break;
+							   }else {
+								   System.out.println( ConsoleColor.RED+ "You select Wrong Option");
 							   }
 							  
 						   }
