@@ -3,8 +3,13 @@ package dao;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import exception.ProjectReportException;
+import model.Project;
 import model.ProjectReport;
 import util.DBUtil;
 
@@ -32,5 +37,37 @@ public class ProjectReportImpl implements ProjectReportDao{
 			}
 		    return add;
 	}
+
+	
+	@Override
+	public List<ProjectReport> getProjectDetaisByEmpId(int empid) throws ProjectReportException{
+		List<ProjectReport> li=new ArrayList<>();
+		
+		try(Connection conn=DBUtil.getConnection()){
+			
+			PreparedStatement st= conn.prepareStatement("select * from projectreport where empid=?");
+			st.setInt(1, empid);
+			ResultSet set= st.executeQuery();
+			
+			while(set.next()) {
+				ProjectReport tamp=new ProjectReport();
+				
+				tamp.setEmpid(set.getInt("empid"));
+				tamp.setTaskcompleted(set.getInt("taskcompleted"));
+				tamp.setTaskpending(set.getInt("taskpending"));
+				tamp.setDescription(set.getString("description"));
+				tamp.setSubtime(set.getDate("subtime"));
+				
+				li.add(tamp);
+			}
+			if(li.isEmpty()) {
+				throw new  ProjectReportException("No Record Found");
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return li;
+	}
+	
 
 }

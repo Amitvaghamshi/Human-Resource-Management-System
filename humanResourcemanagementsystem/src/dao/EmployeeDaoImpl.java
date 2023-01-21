@@ -150,7 +150,7 @@ public class EmployeeDaoImpl implements EmployeeDao{
            try(Connection conn=DBUtil.getConnection()){
 			
 			PreparedStatement st=conn.prepareStatement("select * from employee where name like ?");
-			st.setString(1, name+'%');
+			st.setString(1, '%'+name+'%');
 			
 			ResultSet set=st.executeQuery();
 			while(set.next()){

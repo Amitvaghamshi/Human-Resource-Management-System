@@ -30,6 +30,7 @@ import exception.SalaryException;
 import model.Department;
 import model.Employee;
 import model.Leave;
+import model.LeaveEmployeeDTO;
 import model.Loan;
 import model.LoanEmployeeDTO;
 import model.Project;
@@ -87,6 +88,7 @@ public class HRMDemo {
 						    	 System.out.println("|  7 :Provide Salary                       |");
 						    	 System.out.println("|  8 :Add new Employee                     |");
 						    	 System.out.println("|  9 :Remove employee                      |");
+						    	 System.out.println("|  10:Check project Reports                |");
 						    	 System.out.println("|  0 :Exit                                 |");
 						    	 System.out.println("--------------------------------------------"); 
 						    	 
@@ -129,7 +131,41 @@ public class HRMDemo {
 								    		 //leave approval
 								    		 
 								    		
-								    		 
+								    		 LeaveDao ldao=new LeaveDaoImpl();
+								    		 try {
+								    			 System.out.println(ConsoleColor.TEAL+"All pending Leaves request are hear"+ConsoleColor.RESET);
+								    			 System.out.println();
+								    			List<LeaveEmployeeDTO>li=ldao.getPendingLeaveDetails();
+								    			 
+								    			li.forEach(s->{
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"EmployeeID: "+ConsoleColor.RESET+s.getEmpid());
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"Emp Name:   "+ConsoleColor.RESET+s.getName());
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"From Date:  "+ConsoleColor.RESET+s.getFromdate());
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"To Date:    "+ConsoleColor.RESET+s.getTodate());
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"Reason:     "+ConsoleColor.RESET+s.getReason());
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"Leave Id:   "+ConsoleColor.RESET+s.getLeaveid());
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"Status:     "+ConsoleColor.RESET+ConsoleColor.PURPLE_BOLD+s.getIsapproved()+ConsoleColor.RESET); 
+													  System.out.println("***********************************************************");
+											    });
+								    			System.out.println();
+								    			System.out.println( ConsoleColor.TEAL+ "Enter Empid For whom you want to approve Leave"+ConsoleColor.RESET);
+											 	int eid=sc.nextInt();
+											 	System.out.println( ConsoleColor.TEAL+ "Enter Leave Id For whom you want to approve Leave"+ConsoleColor.RESET);
+											 	int lid=sc.nextInt();
+											 	System.out.println( ConsoleColor.TEAL+ "For Approve Press 1 :: Reject press 0 "+ConsoleColor.RESET);
+											 	int opt=sc.nextInt();
+											 	
+											 	String add=ldao.approveLeave(eid, lid, opt);
+											 	
+											 	if(add.equals("Yes")  && opt==1) {
+											 		 System.out.println(ConsoleColor.YELLOW_BACKGROUND+"Leave Approve Successfully"+ConsoleColor.RESET);
+											 	}else if(add.equals("Yes")  && opt==0) {
+											 		System.out.println(ConsoleColor.YELLOW_BACKGROUND+"Leave Reject Successfully"+ConsoleColor.RESET);
+											 	}
+								    			 
+											} catch (LeaveException e) {
+												System.out.println(e.getMessage());
+											} 
 								    		 
 								    	 }else if(screeningOption ==2) {
 								    		 //loan approval
@@ -461,6 +497,55 @@ public class HRMDemo {
 									} catch (EmployeeException e) {
 										System.out.println(ConsoleColor.RED+e.getMessage()+ConsoleColor.RESET);
 									}
+						    		 
+						    		 
+						    	 }else if(choosepanel==10) {
+						    		 // check project report
+						    		 
+						    		 EmployeeDao empd=new EmployeeDaoImpl();
+						    		 try {
+						    			System.out.println(ConsoleColor.TEAL+"Enter Name Of Employee "+ConsoleColor.RESET);
+							    		sc.nextLine();
+							    		String name=sc.nextLine();
+									 	List<Employee> li= empd.getEmployeeByName(name);
+									 	li.forEach(s->{
+									 		System.out.println("***************************************");
+											System.out.println(ConsoleColor.LIGHT_BLUE +"Emp Id:    "+ConsoleColor.RESET+s.getEmpid());
+											System.out.println(ConsoleColor.LIGHT_BLUE +"From Date: "+ConsoleColor.RESET+s.getName());
+											System.out.println("***************************************");
+									 	});
+									
+									 	try {
+											Thread.sleep(2000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									 	
+									 	System.out.println( ConsoleColor.TEAL+ "Enter Empid For whom you want project report"+ConsoleColor.RESET);
+									 	int eid=sc.nextInt();
+									 	
+									 	ProjectReportDao prod=new ProjectReportImpl();
+									 	List<ProjectReport> lir= prod.getProjectDetaisByEmpId(eid);
+									 	
+									 	lir.forEach(s->{
+											  System.out.println(ConsoleColor.LIGHT_BLUE +"EmployeeID:      "+ConsoleColor.RESET+s.getEmpid());
+											  System.out.println(ConsoleColor.LIGHT_BLUE +"Task Completed:  "+ConsoleColor.RESET+s.getTaskcompleted());
+											  System.out.println(ConsoleColor.LIGHT_BLUE +"Task Pending:    "+ConsoleColor.RESET+s.getTaskpending());
+											  System.out.println(ConsoleColor.LIGHT_BLUE +"Description :    "+ConsoleColor.RESET+s.getDescription());
+											  System.out.println(ConsoleColor.LIGHT_BLUE +"Submission Time: "+ConsoleColor.RESET+s.getSubtime());
+											  System.out.println("***********************************************************");
+											  try {
+												Thread.sleep(250);
+											} catch (InterruptedException e) {
+												e.printStackTrace();
+											}
+									    });
+									 	
+									 	
+									} catch (Exception e) {
+										System.out.println(ConsoleColor.RED+e.getMessage()+ConsoleColor.RESET);
+									}
+						    		 
 						    		 
 						    		 
 						    	 }else if(choosepanel==0) {
