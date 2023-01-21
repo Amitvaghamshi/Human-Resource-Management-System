@@ -146,10 +146,10 @@ public class Employee {
 
 	@Override
 	public String toString() {
-		return "Employee [empid=" + empid + ", name=" + name + ", phone=" + phone + ", email=" + email + ", username="
+		return "empid=" + empid + ", name=" + name + ", phone=" + phone + ", email=" + email + ", username="
 				+ username + ", password=" + password + ", departmentid=" + departmentid + ", dob=" + dob + ", gender="
 				+ gender + ", address=" + address + ", joindate=" + joindate + ", salary=" + salary + ", projectid="
-				+ projectid + "]";
+				+ projectid ;
 	}
 	 
 	 
