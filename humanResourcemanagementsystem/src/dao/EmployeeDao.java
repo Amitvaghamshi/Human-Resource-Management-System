@@ -12,4 +12,6 @@ public interface EmployeeDao {
 	  public int countOfEmployee();
 	  public List<Employee> getAllEmployee() throws EmployeeException;
 	  public List<Employee> getEmployeeByName(String name) throws EmployeeException;
+	  public String provideSalary(int empid,int amount) throws EmployeeException;
+	  public String removeEmployee(int empid) throws EmployeeException;
 }

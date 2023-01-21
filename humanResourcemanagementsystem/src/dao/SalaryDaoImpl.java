@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,26 @@ public class SalaryDaoImpl implements SalaryDao{
 		}
 		  
 		  return li;
+	}
+
+	@Override
+	public String getSalarySleep(int empid, int amount) throws SalaryException {
+		String add="No";
+		
+		try(Connection conn=DBUtil.getConnection()){
+			
+			PreparedStatement st=conn.prepareStatement("insert into salary values(?,null,?,sysdate() )");
+			st.setInt(1, empid);
+			st.setInt(2, amount);
+			
+			int x= st.executeUpdate();
+			if(x>0){
+				add="Yes";
+			}
+		} catch (SQLException e) {
+			throw new SalaryException(e.getMessage());
+		}
+		return add;
 	}
 
 }

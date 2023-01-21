@@ -31,6 +31,7 @@ import model.Department;
 import model.Employee;
 import model.Leave;
 import model.Loan;
+import model.LoanEmployeeDTO;
 import model.Project;
 import model.ProjectReport;
 import model.Salary;
@@ -113,6 +114,69 @@ public class HRMDemo {
 						    		 
 						    	 }else if(choosepanel==2) {
 						    		 //code for screening
+						    		 
+						    		 boolean screenpanel=true;
+						    		 while(screenpanel) {
+						    			 System.out.println(ConsoleColor.YELLOW+"Press Number According to use"+ConsoleColor.RESET);
+								    	 System.out.println("---------------------------------------"); 
+								    	 System.out.println("|  1 :Approve Employee Leave          |");
+								    	 System.out.println("|  2 :Approve Employee Loan           |");
+								    	 System.out.println("|  0 :Exit                            |");
+								    	 System.out.println("---------------------------------------"); 
+								    	 
+								    	 int screeningOption=sc.nextInt();
+								    	 if(screeningOption==1) {
+								    		 //leave approval
+								    		 
+								    		
+								    		 
+								    		 
+								    	 }else if(screeningOption ==2) {
+								    		 //loan approval
+								    		 LoanDao ldao=new LoanDaoImpl();
+								    		 try {
+								    			 System.out.println(ConsoleColor.TEAL+"All pending loan request are hear"+ConsoleColor.RESET);
+								    			 System.out.println();
+								    			List<LoanEmployeeDTO>li=ldao.getPendingLoanDetails();
+								    			 
+								    			li.forEach(s->{
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"EmployeeID: "+ConsoleColor.RESET+s.getEmpid());
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"Emp Name:   "+ConsoleColor.RESET+s.getName());
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"Amount:     "+ConsoleColor.RESET+s.getAmount());
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"Duration:   "+ConsoleColor.RESET+s.getDuration()+" Months");
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"Loan Id:    "+ConsoleColor.RESET+s.getLoanid());
+													  System.out.println(ConsoleColor.LIGHT_BLUE +"Status:     "+ConsoleColor.RESET+ConsoleColor.PURPLE_BOLD+s.getIsapproved()+ConsoleColor.RESET); 
+													  System.out.println("***********************************************************");
+											    });
+								    			System.out.println();
+								    			System.out.println( ConsoleColor.TEAL+ "Enter Empid For whom you want to approve Loan"+ConsoleColor.RESET);
+											 	int eid=sc.nextInt();
+											 	System.out.println( ConsoleColor.TEAL+ "Enter Loan Id For whom you want to approve Loan"+ConsoleColor.RESET);
+											 	int lid=sc.nextInt();
+											 	System.out.println( ConsoleColor.TEAL+ "For Approve Press 1 :: Reject press 0 "+ConsoleColor.RESET);
+											 	int opt=sc.nextInt();
+											 	
+											 	String add=ldao.approveLoan(eid, lid, opt);
+											 	
+											 	if(add.equals("Yes")  && opt==1) {
+											 		 System.out.println(ConsoleColor.YELLOW_BACKGROUND+"Loan Approve Successfully"+ConsoleColor.RESET);
+											 	}else if(add.equals("Yes")  && opt==0) {
+											 		System.out.println(ConsoleColor.YELLOW_BACKGROUND+"Loan Reject Successfully"+ConsoleColor.RESET);
+											 	}
+								    			 
+											} catch (LoanException e) {
+												System.out.println(e.getMessage());
+											}
+								    		 
+								    		 
+								    	 }else if(screeningOption==0) {
+								    		 break;
+								    	 }else {
+								    		 System.out.println( ConsoleColor.RED+ "You select Wrong Option");
+								    	 }
+								    	 
+						    		 }
+						    		 
 						    	 }else if(choosepanel==3) {
 						    		 //getting employee
 						    		 EmployeeDao empdao=new EmployeeDaoImpl();
@@ -275,6 +339,47 @@ public class HRMDemo {
 						    	 }else if(choosepanel==7) {
 						    		 //provide salary
 						    		 
+						    		 EmployeeDao empd=new EmployeeDaoImpl();
+						    		 try {
+						    			System.out.println(ConsoleColor.TEAL+"Enter Name Of Employee "+ConsoleColor.RESET);
+							    		sc.nextLine();
+							    		String name=sc.nextLine();
+									 	List<Employee> li= empd.getEmployeeByName(name);
+									 	li.forEach(s->{
+									 		System.out.println("***************************************");
+											System.out.println(ConsoleColor.LIGHT_BLUE +"Emp Id:    "+ConsoleColor.RESET+s.getEmpid());
+											System.out.println(ConsoleColor.LIGHT_BLUE +"From Date: "+ConsoleColor.RESET+s.getName());
+											System.out.println("***************************************");
+									 	});
+									
+									 	try {
+											Thread.sleep(2000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									 	
+									 	
+									 	SalaryDao sldao=new SalaryDaoImpl();
+									 	
+									 	System.out.println( ConsoleColor.TEAL+ "Enter Empid For whom you want to Provide salary"+ConsoleColor.RESET);
+									 	int eid=sc.nextInt();
+									 	System.out.println( ConsoleColor.TEAL+ "Enter Salary amount "+ConsoleColor.RESET);
+									 	int amount=sc.nextInt();
+									 	
+									   
+									   String isaddedtoemptable= empd.provideSalary(eid, amount);
+									   String isaddedtosalarytable= sldao.getSalarySleep(eid, amount);
+									   
+									   if(isaddedtoemptable.equals("Yes") && isaddedtosalarytable.equals("Yes")) {
+										   System.out.println(ConsoleColor.YELLOW_BACKGROUND+"Salary added Successfully"+ConsoleColor.RESET);
+									   }
+									 	
+									 	
+									 	
+									} catch (Exception e) {
+										System.out.println(ConsoleColor.RED+e.getMessage()+ConsoleColor.RESET);
+									}
+						    		 
 						    	 }else if(choosepanel==8) {
 						    		 //add new  employee
 						    		 
@@ -325,11 +430,41 @@ public class HRMDemo {
 						    	 }else if(choosepanel==9) {
 						    		 //Remove employee
 						    		 
-						    		 
+						    		 EmployeeDao empd=new EmployeeDaoImpl();
+						    		 try {
+						    			System.out.println(ConsoleColor.TEAL+"Enter Name Of Employee "+ConsoleColor.RESET);
+							    		sc.nextLine();
+							    		String name=sc.nextLine();
+									 	List<Employee> li= empd.getEmployeeByName(name);
+									 	li.forEach(s->{
+									 		System.out.println("***************************************");
+											System.out.println(ConsoleColor.LIGHT_BLUE +"Emp Id:    "+ConsoleColor.RESET+s.getEmpid());
+											System.out.println(ConsoleColor.LIGHT_BLUE +"From Date: "+ConsoleColor.RESET+s.getName());
+											System.out.println("***************************************");
+									 	});
+									
+									 	try {
+											Thread.sleep(2000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									 	
+									 	System.out.println( ConsoleColor.TEAL+ "Enter Empid For whom you want Remove from compony"+ConsoleColor.RESET);
+									 	int eid=sc.nextInt();
+									 	
+									 	String isremoved=empd.removeEmployee(eid);
+									 	if(isremoved=="Yes") {
+									 		System.out.println();
+											System.out.println(ConsoleColor.YELLOW_BACKGROUND+"Employee Removed Successfully"+ConsoleColor.RESET);
+									 	}
+									 	
+									} catch (EmployeeException e) {
+										System.out.println(ConsoleColor.RED+e.getMessage()+ConsoleColor.RESET);
+									}
 						    		 
 						    		 
 						    	 }else if(choosepanel==0) {
-						    		 
+						    		 break;
 						    	 }else {
 						    		 System.out.println( ConsoleColor.RED+ "You select Wrong Option");
 						    	 }
