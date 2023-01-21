@@ -14,6 +14,8 @@ import dao.LeaveDao;
 import dao.LeaveDaoImpl;
 import dao.LoanDao;
 import dao.LoanDaoImpl;
+import dao.ProjectDao;
+import dao.ProjectDaoImpl;
 import dao.ProjectReportDao;
 import dao.ProjectReportImpl;
 import dao.SalaryDao;
@@ -23,11 +25,13 @@ import exception.DepartmentException;
 import exception.EmployeeException;
 import exception.LeaveException;
 import exception.LoanException;
+import exception.ProjectException;
 import exception.SalaryException;
 import model.Department;
 import model.Employee;
 import model.Leave;
 import model.Loan;
+import model.Project;
 import model.ProjectReport;
 import model.Salary;
 
@@ -88,10 +92,39 @@ public class HRMDemo {
 						    	 int choosepanel=sc.nextInt();
 						    	 if(choosepanel==1) {
 						    		 // code for dashboard
+						    		 EmployeeDao empd=new EmployeeDaoImpl();
+						    		 DepartmentDao depd=new DepartmentDaoImpl();
+						    		 ProjectDao prod=new ProjectDaoImpl();
+						    		 
+						    		 
+						    		 int countoEmp=empd.countOfEmployee();
+						    		 int countDep=depd.countDepartment();
+						    		 int counpro=prod.countProject();
+						    		 
+						    		 System.out.println();
+						    		 System.out.println("********************************************");
+						    		 System.out.println();
+						    		 System.out.println("No of Employee are    ----> "+ConsoleColor.LIGHT_BLUE+countoEmp+ConsoleColor.RESET);
+						    		 System.out.println("No of Department are   ---> "+ConsoleColor.LIGHT_BLUE+countDep+ConsoleColor.RESET);
+						    		 System.out.println("No of Project are runnig -> "+ConsoleColor.LIGHT_BLUE+counpro+ConsoleColor.RESET);
+						    		 System.out.println();
+						    		 System.out.println("********************************************");
+						    		 System.out.println(1);
+						    		 
 						    	 }else if(choosepanel==2) {
 						    		 //code for screening
 						    	 }else if(choosepanel==3) {
-						    		 //geting employee
+						    		 //getting employee
+						    		 EmployeeDao empdao=new EmployeeDaoImpl();
+						    		 try {
+									List<Employee> li=empdao.getAllEmployee();
+									li.forEach(e->{
+										System.out.println(ConsoleColor.LIGHT_BLUE+e+ConsoleColor.RESET);
+										System.out.println();
+									});
+									} catch (EmployeeException e) {
+										System.out.println(e.getMessage());
+									}
 						    		 
 						    	 }else if(choosepanel==4) {
 						    		 //Add department
@@ -106,7 +139,8 @@ public class HRMDemo {
 						    		 System.out.println(ConsoleColor.TEAL+"Enter department Manager"+ConsoleColor.RESET);
 						    		 int dm=sc.nextInt();
 						    		 System.out.println(ConsoleColor.TEAL+"Enter department Location"+ConsoleColor.RESET);
-						    		 String location=sc.next();
+						    		 sc.nextLine();
+						    		 String location=sc.nextLine();
 						    		 
 						    		 dept.setDname(dname);
 						    		 dept.setDid(did);
@@ -128,8 +162,115 @@ public class HRMDemo {
 						    	 }else if(choosepanel==5) {
 						    		 //assign department
 						    		 
+						    		 EmployeeDao empd=new EmployeeDaoImpl();
+						    		 try {
+						    			System.out.println(ConsoleColor.TEAL+"Enter Name Of Employee "+ConsoleColor.RESET);
+							    		sc.nextLine();
+							    		String name=sc.nextLine();
+									 	List<Employee> li= empd.getEmployeeByName(name);
+									 	li.forEach(s->{
+									 		System.out.println("***************************************");
+											System.out.println(ConsoleColor.LIGHT_BLUE +"Emp Id:    "+ConsoleColor.RESET+s.getEmpid());
+											System.out.println(ConsoleColor.LIGHT_BLUE +"From Date: "+ConsoleColor.RESET+s.getName());
+											System.out.println("***************************************");
+									 	});
+									
+									 	try {
+											Thread.sleep(2000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									 	
+									 	DepartmentDao dpd=new DepartmentDaoImpl();
+									 	List<Department> lid=dpd.getDeptDetal();
+									 	lid.forEach(s->{
+									 		System.out.println(ConsoleColor.BLUE +"Department Name: "+ConsoleColor.RESET+s.getDname());
+											System.out.println(ConsoleColor.BLUE +"Department Id  : "+ConsoleColor.RESET+s.getDid());
+											System.out.println();
+									 	});
+									 	
+									 	System.out.println( ConsoleColor.TEAL+ "Enter Empid For whom you want to assign department"+ConsoleColor.RESET);
+									 	int eid=sc.nextInt();
+									 	System.out.println( ConsoleColor.TEAL+ "Enter DepartmentID For which department you want to assign"+ConsoleColor.RESET);
+									 	int did=sc.nextInt();
+									 	
+									 	try {
+											String added=dpd.assignDepartment(eid, did);
+											if(added.equals("Yes")) {
+												System.out.println();
+												System.out.println(ConsoleColor.YELLOW_BACKGROUND+"Department Assign Successfully"+ConsoleColor.RESET);
+											
+												try {
+													Thread.sleep(1000);
+												} catch (InterruptedException e) {
+													System.out.println(e.getMessage());
+												}
+											}
+										} catch (DepartmentException e) {
+											System.out.println(ConsoleColor.LIGHT_PINK+e.getMessage()+ConsoleColor.RESET);
+										}
+									 	
+									 	
+									} catch (EmployeeException e) {
+										System.out.println(ConsoleColor.LIGHT_PINK+e.getMessage()+ConsoleColor.RESET);
+									}
+						    		 
 						    	 }else if(choosepanel==6) {
 						    		 //provide project
+						    		 
+						    		 
+						    		 EmployeeDao empd=new EmployeeDaoImpl();
+						    		 try {
+						    			System.out.println(ConsoleColor.TEAL+"Enter Name Of Employee "+ConsoleColor.RESET);
+							    		sc.nextLine();
+							    		String name=sc.nextLine();
+									 	List<Employee> li= empd.getEmployeeByName(name);
+									 	li.forEach(s->{
+									 		System.out.println("***************************************");
+											System.out.println(ConsoleColor.LIGHT_BLUE +"Emp Id:    "+ConsoleColor.RESET+s.getEmpid());
+											System.out.println(ConsoleColor.LIGHT_BLUE +"From Date: "+ConsoleColor.RESET+s.getName());
+											System.out.println("***************************************");
+									 	});
+									
+									 	try {
+											Thread.sleep(2000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									 	
+									 	ProjectDao prod=new ProjectDaoImpl();
+									 	List<Project> lipro=prod.getProjectsDetail();
+									 	lipro.forEach(s->{
+									 		System.out.println(ConsoleColor.BLUE +"Project Name: "+ConsoleColor.RESET+s.getProname());
+											System.out.println(ConsoleColor.BLUE +"Project Id  : "+ConsoleColor.RESET+s.getProjectid());
+											System.out.println();
+									 	});
+									 	
+									 	System.out.println( ConsoleColor.TEAL+ "Enter Empid For whom you want to assign Project"+ConsoleColor.RESET);
+									 	int eid=sc.nextInt();
+									 	System.out.println( ConsoleColor.TEAL+ "Enter ProjectId For which Project you want to assign"+ConsoleColor.RESET);
+									 	int pid=sc.nextInt();
+									 	
+									 	try {
+											String added=prod.assignProject(eid, pid);
+											if(added.equals("Yes")) {
+												System.out.println();
+												System.out.println(ConsoleColor.YELLOW_BACKGROUND+"Project Assign Successfully"+ConsoleColor.RESET);
+											
+												try {
+													Thread.sleep(1000);
+												} catch (InterruptedException e) {
+													System.out.println(e.getMessage());
+												}
+											}
+										} catch (ProjectException e) {
+											System.out.println(ConsoleColor.RED+e.getMessage()+ConsoleColor.RESET);
+										}
+									 	
+									 	
+									} catch (EmployeeException e) {
+										System.out.println(ConsoleColor.RED+e.getMessage()+ConsoleColor.RESET);
+									}
 						    		 
 						    	 }else if(choosepanel==7) {
 						    		 //provide salary
@@ -140,7 +281,8 @@ public class HRMDemo {
 						    		 EmployeeDao emdao=new EmployeeDaoImpl();
 						    		 
 						    		 System.out.println(ConsoleColor.TEAL+ "Enter Employee Name"+ConsoleColor.RESET);
-						    		 String name=sc.next();
+						    		 sc.nextLine();
+						    		 String name=sc.nextLine();
 						    		 System.out.println(ConsoleColor.TEAL+ "Enter Mobile Number"+ConsoleColor.RESET);
 						    		 String mobile=sc.next();
 						    		 System.out.println(ConsoleColor.TEAL+ "Enter Email id"+ConsoleColor.RESET);
@@ -154,7 +296,8 @@ public class HRMDemo {
 						    		 System.out.println(ConsoleColor.TEAL+ "Enter Your gender"+ConsoleColor.RESET);
 						    		 String egender=sc.next();
 						    		 System.out.println(ConsoleColor.TEAL+ "Enter Address"+ConsoleColor.RESET);
-						    		 String eadd=sc.next();
+						    		 sc.nextLine();
+						    		 String eadd=sc.nextLine();
 						    		 System.out.println(ConsoleColor.TEAL+ "Enter Join Date Format[ yyyy mm dd ] "+ConsoleColor.RESET);
 						    		 Date ejoin=new Date(sc.nextInt(), sc.nextInt(), sc.nextInt());
 						    		 
@@ -182,12 +325,15 @@ public class HRMDemo {
 						    	 }else if(choosepanel==9) {
 						    		 //Remove employee
 						    		 
+						    		 
+						    		 
+						    		 
 						    	 }else if(choosepanel==0) {
 						    		 
 						    	 }else {
 						    		 System.out.println( ConsoleColor.RED+ "You select Wrong Option");
 						    	 }
-						    	 break;
+						    	
 						    }
 						    
 						    
@@ -292,6 +438,7 @@ public class HRMDemo {
 								    System.out.println();
 								    sl.forEach(s->{
 								    	   System.out.println( ConsoleColor.LIGHT_BLUE +"Salary Id: "+s.getSalaryid()+"  "+"Amount: "+s.getAmount()+"  "+"Time: " +s.getEntry()+"  "+s.getTime()+ConsoleColor.RESET);
+								    	   System.out.println();
 								    });
 									System.out.println("=======================================================");
 									System.out.println();
@@ -441,6 +588,8 @@ public class HRMDemo {
 								   //exit;
 								   System.out.println();
 								   break;
+							   }else {
+								   System.out.println( ConsoleColor.RED+ "You select Wrong Option");
 							   }
 							  
 						   }
