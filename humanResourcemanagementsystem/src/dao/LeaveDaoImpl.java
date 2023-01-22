@@ -46,7 +46,8 @@ public class LeaveDaoImpl implements LeaveDao{
 		  
 		  try(Connection conn=DBUtil.getConnection()){
 			
-			  PreparedStatement st=conn.prepareStatement("select * from leaves");
+			  PreparedStatement st=conn.prepareStatement("select * from leaves where empid=?");
+			  st.setInt(1, empid);
 			  ResultSet set=st.executeQuery();
 			  while(set.next()) {
 				  Leave tamp=new Leave();

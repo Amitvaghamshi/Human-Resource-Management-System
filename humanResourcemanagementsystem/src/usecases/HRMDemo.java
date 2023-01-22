@@ -657,7 +657,7 @@ public class HRMDemo {
 								    System.out.println(ConsoleColor.PURPLE+ "Your salary Detais are" +ConsoleColor.RESET);
 								    System.out.println();
 								    sl.forEach(s->{
-								    	   System.out.println( ConsoleColor.LIGHT_BLUE +"Salary Id: "+s.getSalaryid()+"  "+"Amount: "+s.getAmount()+"  "+"Time: " +s.getEntry()+"  "+s.getTime()+ConsoleColor.RESET);
+								    	   System.out.println( ConsoleColor.LIGHT_BLUE +"Salary Id: "+s.getSalaryid()+"  "+"Amount: "+s.getAmount()+"  "+"Credited Time: " +s.getEntry()+"  "+s.getTime()+ConsoleColor.RESET);
 								    	   System.out.println();
 								    });
 									System.out.println("=======================================================");
@@ -715,7 +715,7 @@ public class HRMDemo {
 								   
 								   LeaveDao ld=new LeaveDaoImpl();
 								   try {
-								List<Leave> li=ld.getLeaveDetais(userdetails.getEmpid());
+								   List<Leave> li=ld.getLeaveDetais(userdetails.getEmpid());
 									
 									
 									li.forEach(s->{
@@ -736,7 +736,7 @@ public class HRMDemo {
 									   
 									
 								} catch (LeaveException e) {
-									e.printStackTrace();
+									System.out.println(e.getMessage());
 								}
 								   
 								   

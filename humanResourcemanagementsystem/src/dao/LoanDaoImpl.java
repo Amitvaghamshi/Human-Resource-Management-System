@@ -22,7 +22,7 @@ public class LoanDaoImpl implements LoanDao{
 		  
 		  try(Connection conn=DBUtil.getConnection()){
 			  
-			 PreparedStatement st=conn.prepareStatement("insert into loan values(?,?,?,?,?)");
+			 PreparedStatement st=conn.prepareStatement("insert into loan values(?,?,?,?,?,null)");
 			 st.setInt(1, loan.getEmpid());
 			 st.setInt(2,loan.getAmount());
 			 st.setInt(3, loan.getDuration());
