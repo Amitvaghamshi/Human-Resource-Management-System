@@ -8,8 +8,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import exception.EmployeeException;
 import exception.LoanException;
 import model.Loan;
+import model.LoanEmployeeDTO;
 import util.DBUtil;
 
 public class LoanDaoImpl implements LoanDao{
@@ -20,7 +22,7 @@ public class LoanDaoImpl implements LoanDao{
 		  
 		  try(Connection conn=DBUtil.getConnection()){
 			  
-			 PreparedStatement st=conn.prepareStatement("insert into loan values(?,?,?,?,?)");
+			 PreparedStatement st=conn.prepareStatement("insert into loan values(?,?,?,?,?,null)");
 			 st.setInt(1, loan.getEmpid());
 			 st.setInt(2,loan.getAmount());
 			 st.setInt(3, loan.getDuration());
@@ -70,6 +72,73 @@ public class LoanDaoImpl implements LoanDao{
 			throw new LoanException(e.getMessage());
 		}
 		 return li;
+	}
+
+
+
+
+
+	@Override
+	public List<LoanEmployeeDTO> getPendingLoanDetails() throws LoanException{
+		List<LoanEmployeeDTO> li=new ArrayList<>();
+		
+		try(Connection conn=DBUtil.getConnection()){
+			
+		PreparedStatement st=	conn.prepareStatement("select  e.empid as eid ,name,amount,duration,isapproved ,loanid from loan l join employee e on l.empid=e.empid and isapproved='pending' ");
+		ResultSet set=st.executeQuery();
+		while(set.next()) {
+			LoanEmployeeDTO tamp=new LoanEmployeeDTO();
+			tamp.setEmpid(set.getInt("eid"));
+			tamp.setAmount(set.getInt("amount"));
+			tamp.setName(set.getString("name"));
+			tamp.setDuration(set.getInt("duration"));
+			tamp.setIsapproved(set.getString("isapproved"));
+			tamp.setLoanid(set.getInt("loanid"));
+			   
+			   li.add(tamp);
+		}
+		if(li.isEmpty()) {
+			throw new LoanException("No pending request found");
+		}
+		
+		} catch (Exception e) {
+			throw new LoanException(e.getMessage());
+		}
+		return li;
+	}
+
+
+
+
+
+	@Override
+	public String approveLoan(int empid,int loanid,int res) throws LoanException {
+		String app="No";
+		
+		try(Connection conn=DBUtil.getConnection()){
+			String status="reject";
+			if(res==1) {
+				status="approved";
+			}else if(res==0) {
+				status="reject";
+			}else {
+				throw new LoanException("You have select wrong Option");
+			}
+			PreparedStatement st=conn.prepareStatement("update loan set isapproved =? where empid=? and loanid=?");
+			st.setString(1, status);
+			st.setInt(2, empid);
+			st.setInt(3, loanid);
+			
+			int x=st.executeUpdate();
+			if(x>0) {
+				app="Yes";
+			}
+			
+		} catch (Exception e) {
+			throw new LoanException(e.getMessage());
+		}
+		
+		return app;
 	}
 
 	

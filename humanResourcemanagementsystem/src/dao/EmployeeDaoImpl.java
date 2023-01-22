@@ -150,7 +150,7 @@ public class EmployeeDaoImpl implements EmployeeDao{
            try(Connection conn=DBUtil.getConnection()){
 			
 			PreparedStatement st=conn.prepareStatement("select * from employee where name like ?");
-			st.setString(1, name+'%');
+			st.setString(1, '%'+name+'%');
 			
 			ResultSet set=st.executeQuery();
 			while(set.next()){
@@ -171,6 +171,55 @@ public class EmployeeDaoImpl implements EmployeeDao{
 		}
 		
 		return li;
+	}
+
+
+
+
+
+
+	@Override
+	public String provideSalary(int empid,int amount) throws EmployeeException {
+		String add="No";
+		
+		try(Connection conn=DBUtil.getConnection()){
+			
+		 	PreparedStatement st= conn.prepareStatement("update employee set salary =? where empid=?");
+		 	st.setInt(1, amount);
+			st.setInt(2, empid);
+			
+			int x= st.executeUpdate();
+			if(x>0){
+				add="Yes";
+			}
+			
+		} catch (Exception e) {
+			throw new EmployeeException(e.getMessage());
+		}
+		
+		return add;
+	}
+
+
+
+
+
+
+	@Override
+	public String removeEmployee(int empid) throws EmployeeException {
+		   String remove="No";
+		   
+		   try(Connection conn=DBUtil.getConnection()){
+			   PreparedStatement st=conn.prepareStatement("delete from employee where empid =? ");
+			   st.setInt(1, empid);
+			   int x= st.executeUpdate();
+			   if(x>0) {
+				   remove="Yes";
+			   }
+		} catch (Exception e) {
+			throw new EmployeeException(e.getMessage());
+		}
+		   return remove;
 	}
 
 	
