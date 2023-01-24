@@ -1,6 +1,8 @@
 package usecases;
+import java.sql.Connection;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -36,10 +38,14 @@ import model.LoanEmployeeDTO;
 import model.Project;
 import model.ProjectReport;
 import model.Salary;
+import util.DBUtil;
 
 public class HRMDemo {
 
 	public static void main(String[] args) {
+		
+		try {
+			
 		    Scanner sc=new Scanner(System.in);
 		    
 		    boolean work=true;
@@ -68,7 +74,7 @@ public class HRMDemo {
 						    System.out.println();
 						    //sleep main thread for a 1 sec
 						    try {
-								Thread.sleep(1000);
+								Thread.sleep(500);
 							} catch (InterruptedException e) {
 								System.out.println(e.getMessage());
 							}
@@ -480,7 +486,7 @@ public class HRMDemo {
 									 	});
 									
 									 	try {
-											Thread.sleep(2000);
+											Thread.sleep(1000);
 										} catch (InterruptedException e) {
 											e.printStackTrace();
 										}
@@ -503,7 +509,7 @@ public class HRMDemo {
 						    		 // check project report
 						    		 
 						    		 EmployeeDao empd=new EmployeeDaoImpl();
-						    		 try {
+						    		 try{
 						    			System.out.println(ConsoleColor.TEAL+"Enter Name Of Employee "+ConsoleColor.RESET);
 							    		sc.nextLine();
 							    		String name=sc.nextLine();
@@ -516,7 +522,7 @@ public class HRMDemo {
 									 	});
 									
 									 	try {
-											Thread.sleep(2000);
+											Thread.sleep(1000);
 										} catch (InterruptedException e) {
 											e.printStackTrace();
 										}
@@ -597,7 +603,7 @@ public class HRMDemo {
 						   System.out.println();
 						   //sleep main thread for a 1 sec
 						    try {
-								Thread.sleep(1000);
+								Thread.sleep(100);
 							} catch (InterruptedException e) {
 								System.out.println(e.getMessage());
 							}
@@ -830,7 +836,6 @@ public class HRMDemo {
 		    		   }
 		    		   
 		    		   
-		    		   
 		    	   }else if(loginNumber==0) {
 		    		   //exit
 		    		   System.out.println();
@@ -842,6 +847,9 @@ public class HRMDemo {
 		    	   }
 		    	   
 		    }
-		    
+		} catch (InputMismatchException e) {
+			   System.out.println(ConsoleColor.RED_BACKGROUND+ "Wrong Input ");
+			   main(args);
+		}
 	}
 }

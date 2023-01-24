@@ -57,8 +57,8 @@ public class ProjectDaoImpl implements ProjectDao{
 		try(Connection conn=DBUtil.getConnection()){
 			
 		  PreparedStatement st=conn.prepareStatement("update employee set projectid =? where empid =?");
-		  st.setInt(1, empid);
-		  st.setInt(2, proid);
+		  st.setInt(1, proid);
+		  st.setInt(2, empid);
 		  int x= st.executeUpdate();
 		  if(x>0) {
 			   ass="Yes";
