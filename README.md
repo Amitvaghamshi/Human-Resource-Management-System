@@ -5,7 +5,9 @@ The Human Resource Management System (HRMS) is a console-based application devel
 
 
 Admin Panel:
-The Admin Panel is designed for HR or management personnel to manage employees and their related tasks. The admin can access a dashboard that provides an overview of key HR metrics such as employee count, pending leave requests, and salary information. The admin can perform various tasks such as employee onboarding, leave management, salary management, and employee data management.
+The Admin Panel is designed for HR or management personnel to manage employees and their related tasks. 
+The admin can access a dashboard that provides an overview of key HR metrics such as employee count, pending leave requests, and salary information. 
+The admin can perform various tasks such as employee onboarding, leave management, salary management, and employee data management.
 The admin can manage leave requests by screening and approving or rejecting leave requests submitted by employees.
 The admin can also manage employee salaries.
 The admin has the authority to manage employee data, including updating employee details, managing employee roles and permissions, and deactivating employees who have left the organization or are no longer active.
